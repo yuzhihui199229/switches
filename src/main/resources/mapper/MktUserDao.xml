@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fpga.switches.dao.MktUserDao">
+    <select id="getMktUser" resultType="mktUser">
+         SELECT id,user_name,switch_port,push_type FROM market_user
+        <where>
+         <if test="userName!=null and userName!=''">
+             user_name like concat('%',#{userName},'%')
+         </if>
+        </where>
+    </select>
+
+    <select id="getPort" resultType="int">
+        select count(1) from market_user where SWITCH_PORT=#{switchPort}
+    </select>
+
+    <select id="getUser" resultType="int">
+        select count(1) from market_user where USER_NAME=#{userName}
+    </select>
+
+    <insert id="istMktUser">
+        INSERT INTO market_user (USER_NAME,MARKET_PASSWORD,SWITCH_PORT,PUSH_TYPE) values(#{userName},#{marketPassword},#{switchPort},#{pushType})
+    </insert>
+
+    <delete id="delMktUser">
+        delete from market_user where id=#{id}
+    </delete>
+
+    <update id="uptMktUser">
+        update market_user
+        <set>
+            <if test="userName!=null and userName!=''">
+                user_name=#{userName},
+            </if>
+            <if test="marketPassword!=null and marketPassword!=''">
+                market_password=#{marketPassword},
+            </if>
+            <if test="switchPort!=null and switchPort!=''">
+                switch_port=#{switchPort},
+            </if>
+            <if test="pushType!=null and pushType!=''">
+                push_type=#{pushType}
+            </if>
+        </set>
+          where id=#{id}
+    </update>
+
+</mapper>
